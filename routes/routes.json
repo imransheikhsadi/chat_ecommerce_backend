@@ -1,0 +1,30 @@
+{
+    "${host}/api/v1/": {
+        "users/": {
+            "POST": "",
+            "GET": "Get Users",
+            "${id}/": {
+                "POST": "",
+                "GET": "Get Single User",
+                "PATCH": "Update user",
+                "DELETE": "Deactivate User"
+            }
+        },
+        "products/": {
+            "POST":"Create Product",
+            "GET":"Get Products",
+            "${id}/": {
+                "POST": "",
+                "GET": "Get Single Product",
+                "PATCH":"Update Product",
+                "DELETE": "Deactivate Product"
+            }
+        },
+        "signup/": {
+            "POST": "Create User Profile"
+        },
+        "login/": {
+            "POST": "Login to user account"
+        }
+    }
+}

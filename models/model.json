@@ -1,0 +1,39 @@
+{
+    "pruduct": {
+        "name": "",
+        "price": "",
+        "currentPrice": "",
+        "productCode": "",
+        "productType": "",
+        "catagory": "",
+        "tags": [],
+        "quantity": "",
+        "brand": "",
+        "model": "",
+        "sold": "",
+        "basePrice": "",
+        "size": "",
+        "color": "",
+        "image": {
+            "small": "",
+            "card": "",
+            "original": ""
+        },
+        "totalStar": "",
+        "avgStar": "",
+        "reviews": "",
+        "title": "",
+        "variant": "",
+        "description": ""
+    },
+    "user": {
+        "name": "",
+        "email": "",
+        "password": "",
+        "role": [],
+        "boughtProducts": [],
+        "wishlidt": [],
+        "totalTransaction": "",
+        "lastTransaction": ""
+    }
+}
