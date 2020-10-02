@@ -23,8 +23,10 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
 exports.sendUser = catchAsync(async (req, res, next) => {
 
+
     res.status(200).json({
         status: 'success',
+        token: req.userToken,
         user: req.user
     });
 });
@@ -152,7 +154,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.userSearch = catchAsync( async(req,res,next)=>{
-    const features = new ApiFeatures(User.find(),req.query).search().select('name email')
+    const features = new ApiFeatures(User.find(),req.query).search().select('name email avatar')
     const users    = await features.query;
 
     if(!users)return next(new AppError('Failed to get users',500))

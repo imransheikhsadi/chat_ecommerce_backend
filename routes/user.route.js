@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route('/')
     .post(authenticate,sendUser)
-    .get(authenticate,checkAdmin,userSearch)
+    .get(userSearch)
     // .patch();
 
 router.route('/:id')

@@ -68,6 +68,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     if (!currentUser) return next(new AppError('No User Found', 404));
 
     req.user = currentUser;
+    req.userToken = token;
 
     next();
 
