@@ -17,8 +17,8 @@ mongoose.connect(DB, {
     useFindAndModify: false
 }).then(() => {
     console.log('DB conntection establish');
-    defaultAdmin();
-    init();
+    // defaultAdmin();
+    // init();
 }).catch(err=>console.log(err));
 
 server.listen(port,()=>{

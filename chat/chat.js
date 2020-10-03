@@ -63,6 +63,13 @@ function chat(server) {
             }
         });
 
+        socket.on('typeing',(data)=>{
+            if(users[data.to]){
+                users[data.to].emit('typeing', {status: data.status})
+            }
+            console.log(data)
+        });
+
         // socket.on('message', (data) => {
         //     const adminIds = Object.keys(admins)
         //     if (adminIds.includes(user.id)) {
