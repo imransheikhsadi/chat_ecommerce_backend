@@ -2,9 +2,20 @@ const Message = require("../models/Message.model");
 const ApiFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError.util");
 const catchAsync = require("../utils/catchAsync.util");
+const uploadImage = require("../utils/upload");
 
 exports.createMessage = catchAsync(async (req, res, next) => {
-    const message = await Message.create(req.body);
+    let message;
+
+    if(req.body.messageType === 'image'){
+        const src = (await uploadImage(req.body.imageSrc)).secure_url
+        if(!src)return next(new AppError('Failed to upload image',400))
+        req.body.src = src;
+        message = await Message.create(req.body);
+
+    }else{
+        message = await Message.create(req.body);
+    }
 
     if (!message) return next(new AppError('Failed To create Message', 400));
 
@@ -17,7 +28,6 @@ exports.createMessage = catchAsync(async (req, res, next) => {
 
 exports.getMessages = catchAsync(async (req, res, next) => {
     const { from, to } = req.body;
-    console.log(req.body, 'message request')
     if (!from || !to) return next(new AppError('Bad request', 400))
     const features = new ApiFeatures(Message.find(
         {

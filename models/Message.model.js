@@ -19,6 +19,12 @@ const messageSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
+    messageType: {
+        type: String,
+        enum: ['image','text','emoji'],
+        default: 'text'
+    },
+    src: String,
     seen: Boolean
 });
 
