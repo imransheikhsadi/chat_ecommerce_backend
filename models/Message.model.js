@@ -25,7 +25,8 @@ const messageSchema = new mongoose.Schema({
         default: 'text'
     },
     src: String,
-    seen: Boolean
+    seen: Boolean,
+    createdBy: String
 });
 
 

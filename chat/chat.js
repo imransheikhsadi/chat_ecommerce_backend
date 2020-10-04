@@ -4,6 +4,7 @@ const catchAsync = require("../utils/catchAsync.util");
 const User = require("../models/User.model");
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const Group = require('../models/Group.model');
 
 
 const customers = {};
@@ -56,11 +57,33 @@ function chat(server) {
 
         });
 
+        socket.on('addToGroup',async(data)=>{
+            if(!user)return;
+            const group = await Group.findById(data.id);
+            if(!group)return;
+            
+            if(group.members.includes(user.id)){
+                socket.join(group._id);
+                console.log('User added To the group')
+            }
+            // console.log(group.members)
+            // console.log(data.id)
+
+            console.log('Add To Group was Called')
+
+        });
+
         socket.on('chat', (data) => {
             console.log(data);
-            if (users[data.to]) {
-                users[data.to].emit('chat', data)
-            }
+            // if (users[data.to]) {
+                console.log('is defined')
+                if(data.type === 'group'){
+                    console.log('group chat')
+                    socket.to(data.to).emit('chat',data)
+                }else{
+                    users[data.to].emit('chat', data)
+                }
+            // }
         });
 
         socket.on('typeing',(data)=>{

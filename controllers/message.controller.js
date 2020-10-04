@@ -7,6 +7,8 @@ const uploadImage = require("../utils/upload");
 exports.createMessage = catchAsync(async (req, res, next) => {
     let message;
 
+    req.body.createdBy = req.user.name;
+
     if(req.body.messageType === 'image'){
         const src = (await uploadImage(req.body.imageSrc)).secure_url
         if(!src)return next(new AppError('Failed to upload image',400))
@@ -37,6 +39,24 @@ exports.getMessages = catchAsync(async (req, res, next) => {
             ]
             
         }
+    ).sort({_id: -1}), req.query).filter().paginate();
+    const messages = await features.query;
+
+    if (!messages) return next(new AppError('Failed to get messages', 400))
+
+
+    res.status(200).json({
+        status: 'success',
+        messages: messages.reverse()
+    })
+
+});
+
+exports.getGroupMessages = catchAsync(async (req, res, next) => {
+    const { from, to } = req.body;
+    if (!to) return next(new AppError('Bad request', 400))
+    const features = new ApiFeatures(Message.find(
+        {to: to}
     ).sort({_id: -1}), req.query).filter().paginate();
     const messages = await features.query;
 
