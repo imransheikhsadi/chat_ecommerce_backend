@@ -74,7 +74,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
 });
 
 exports.checkAdmin = catchAsync(async (req, res, next) => {
-    if (!req.user.role.includes('admin')) return next(new AppError('You Dont Have Permission To Do This Action', 401));
+    if (!req.user.role.includes('admin')) return next(new AppError('Only Admin Can Do this action', 401));
     next();
 });
 
