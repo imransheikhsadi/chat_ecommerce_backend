@@ -33,7 +33,7 @@ exports.createProduct = catchAsync(async function (req, res, next) {
 });
 
 exports.getProducts = catchAsync(async function (req, res, next) {
-    const features = new ApiFeatures(Product.find(), req.query).filter().sort().paginate().search();
+    const features = new ApiFeatures(Product.find({active: {$ne: false}}), req.query).filter().sort().paginate().search();
     const products = await features.query;
     const count = await Product.countDocuments();
 
@@ -48,6 +48,15 @@ exports.getProducts = catchAsync(async function (req, res, next) {
 
 exports.getSingleProduct = catchAsync(async function (req, res, next) {
     const product = await Product.findById(req.params.id)
+
+    res.status(200).json({
+        status: 'success',
+        product
+    });
+});
+
+exports.deleteProduct = catchAsync(async function (req, res, next) {
+    const product = await Product.findByIdAndUpdate(req.params.id,{active: false})
 
     res.status(200).json({
         status: 'success',

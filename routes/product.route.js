@@ -1,5 +1,5 @@
 const express = require('express');
-const { createProduct,getProducts, getSingleProduct, updateProduct, checkout } = require('../controllers/product.controller');
+const { createProduct,getProducts, getSingleProduct, updateProduct, checkout, deleteProduct } = require('../controllers/product.controller');
 const { authenticate, checkModerator, checkAdmin } = require('../controllers/auth.controller');
 
 
@@ -14,6 +14,7 @@ router.route('/')
 router.route('/:id')
 .get(getSingleProduct)
 .patch(authenticate,checkModerator,updateProduct)
+.delete(authenticate,checkAdmin,deleteProduct)
 
 
 module.exports = router;
