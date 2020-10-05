@@ -65,10 +65,12 @@ function chat(server) {
         });
 
         socket.on('chat', (data) => {
-                if(data.type === 'group'){
-                    socket.to(data.to).emit('chat',data)
-                }else{
-                    users[data.to].emit('chat', data)
+                if(users[data.to]){
+                    if(data.type === 'group'){
+                        socket.to(data.to).emit('chat',data)
+                    }else{
+                        users[data.to].emit('chat', data)
+                    }
                 }
         });
 
