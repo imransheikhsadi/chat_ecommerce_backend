@@ -7,6 +7,7 @@ const AppError = require("../utils/appError.util");
 const filter = require("../utils/filterObj.util");
 const googleOAuth = require("../utils/googleOAuth");
 const { default: fetch } = require("node-fetch");
+const Group = require("../models/Group.model");
 
 
 
@@ -150,6 +151,17 @@ exports.signinWithFacebook = catchAsync(async(req,res,next)=>{
         token,
         user
     });
+});
+
+exports.checkMessagePermission = catchAsync(async(req,res,next)=>{
+    console.log({from: req.body.from,id: req.user._id})
+    if(req.body.from != req.user._id)return next(new AppError('Bad Request',404));
+    if(req.body.type === 'group'){
+        const group = await Group.findById(req.body.to);
+        if(!group) return next(new AppError('No Group Found',400));
+        if(!group.members.includes(req.user._id))return next(new AppError('You are not a member of this group'))
+    }
+    next();
 });
 
 
