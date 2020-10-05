@@ -38,10 +38,6 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Product'
     }],
-    wishlist: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Product'
-    }],
     joinedAt: {
         type: Date,
         default: Date.now()
