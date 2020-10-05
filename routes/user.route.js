@@ -9,18 +9,16 @@ const router = express.Router();
 router.route('/')
     .post(authenticate,sendUser)
     .get(userSearch)
-    // .patch();
 
 router.route('/:id')
     .get(authenticate,getUser)
     .patch(authenticate,updateUser)
     .patch(authenticate,updateUser)
-    // .delete(/* Deactivate Certain user*/);
 
 router.patch('/update-admin/:id',authenticate,checkAdmin,updateAdmin);
 router.post('/signup',signUp);
 router.post('/login',signIn);
-router.post('/admins',authenticate,checkAdmin,getAllAdmin);
+router.post('/admins',authenticate,checkAdmin,getAllUser);
 router.post('/forgetPassword',forgetPassword);
 router.patch('/resetPassword/:token',resetPassword);
 router.post('/signinWithGoogle',signinWithGoogle);

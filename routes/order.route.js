@@ -6,13 +6,9 @@ const router = express.Router();
 
 
 router.route('/')
-// .post(authenticate,checkModerator,createProduct)
-// .post(createProduct)
 .get(getOrders);
 
 router.route('/:id')
-// .post(authenticate,checkModerator,createProduct)
-// .post(createProduct)
 .post(updateOrder);
 
 

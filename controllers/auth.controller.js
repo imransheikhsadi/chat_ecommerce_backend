@@ -12,7 +12,6 @@ const { default: fetch } = require("node-fetch");
 
 exports.signUp = catchAsync(async (req, res, next) => {
     const userData = filter(req.body, 'name', 'password', 'email', 'confirmPassword')
-    console.log(userData);
     const newUser = await User.create(userData);
 
     if (!newUser) return next(new AppError('User Creation Failed', 400))
@@ -100,7 +99,6 @@ exports.signinWithGoogle = catchAsync(async (req, res, next) => {
 
     const user = await User.findOne({ email: googleUser.email });
 
-    console.log(user)
 
     if (!user) return next(new AppError('No user Found', 404));
 
@@ -122,7 +120,6 @@ exports.signinWithGoogle = catchAsync(async (req, res, next) => {
 
 exports.signinWithFacebook = catchAsync(async(req,res,next)=>{
     const {userID,accessToken} = req.body;
-    console.log(req.body)
 
     if(!userID || !accessToken)return next(new AppError('Failed To Login with Facebook',400));
 

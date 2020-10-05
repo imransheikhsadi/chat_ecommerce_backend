@@ -5,11 +5,8 @@ const userRoute = require('./routes/user.route');
 const productRoute = require('./routes/product.route');
 const otherRoute = require('./routes/other.route');
 const orderRoute = require('./routes/order.route');
-const statsRoute = require('./routes/stats.route');
-const reviewRoute = require('./routes/review.route');
 const messageRoute = require('./routes/message.route');
 const groupRoute = require('./routes/group.route');
-const cors = require('cors');
 var bodyParser = require('body-parser')
 
 
@@ -19,11 +16,6 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
 app.use(cookieParser());
 
-
-// app.use(cors({
-//     preflightContinue: true,
-//     credentials: true
-// }))
 
 app.use((req,res,next)=>{
 
@@ -42,8 +34,6 @@ app.use('/api/v1/products', productRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/orders', orderRoute);
 app.use('/api/v1/others', otherRoute);
-app.use('/api/v1/stats', statsRoute);
-app.use('/api/v1/reviews', reviewRoute);
 app.use('/api/v1/messages', messageRoute);
 app.use('/api/v1/groups', groupRoute);
 

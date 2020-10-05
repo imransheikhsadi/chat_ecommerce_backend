@@ -70,7 +70,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
 exports.updateAdmin = catchAsync(async (req, res, next) => {
     const filteredObject = filter(req.body,'role');
-    console.log({filteredObject})
 
     if(Object.keys(filteredObject).length === 0)return next(new AppError('You can only change role',401))
 
@@ -86,7 +85,6 @@ exports.updateAdmin = catchAsync(async (req, res, next) => {
 
 exports.forgetPassword = catchAsync(async (req, res, next) => {
     const email = req.body.email;
-    console.log(req)
     if (!email) return next(new AppError('Please Provide an Email', 400))
 
     const user = await User.findOne({ email })
@@ -110,13 +108,11 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
             status: 'success',
             message: 'Please Check your Email for Token'
         });
-        console.log(response)
 
     } catch (error) {
         user.passwordResetToken = undefined;
         user.passwordResetExpire = undefined;
         await user.save({ validateModifiedOnly: true })
-        console.log(error)
 
         return next(new AppError('Error,Sending Email.Trying again later',500))
     }
@@ -125,7 +121,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-    console.log(req)
     const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
     const user = await User.findOne({
@@ -133,7 +128,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
         passwordResetExpire: { $gt: Date.now() }
     });
 
-    console.log(req.body)
 
     if(!user) return next(new AppError('Invalid Token or Token Expired',400))
 

@@ -23,7 +23,6 @@ exports.getOrders = catchAsync(async (req,res,next)=>{
 exports.updateOrder = catchAsync(async (req,res,next)=>{
 
     const filteredBody  = filter(req.body,'deliveryStatus','paymentStatus')
-    console.log({orderid: req.params.id})
     const order = await Order.findByIdAndUpdate(req.params.id,filteredBody,{new: true})    
 
     if(!order)return next(new AppError('Failed To Update Order',500))

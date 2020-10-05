@@ -6,10 +6,7 @@ const filter = require("../utils/filterObj.util");
 const mergeObject = require("../utils/mergeObject");
 const AppError = require("../utils/appError.util");
 const Order = require("../models/Orders.model");
-const isValidCoupon = require("../utils/isValidCoupon");
-const Other = require("../models/Others.model");
 const {paypalCheckout} = require("../utils/paypalCheckout");
-const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 
 
@@ -74,7 +71,9 @@ exports.updateProduct = catchAsync(async function (req, res, next) {
 
     req.body.image = imageObject;
 
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    const filteredData = req.user.role === 'admin'? req.body : filter(req.body,'quantity')
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, filteredData , { new: true })
 
     res.status(200).json({
         status: 'success',
@@ -93,7 +92,6 @@ exports.checkout = catchAsync(async (req, res, next) => {
     const line_items = [];
     let totalProduct = 0
     let totalProductPrice = 0;
-    let coupon = null;
     let discount = 0;
 
     products.map(product => {
@@ -106,21 +104,7 @@ exports.checkout = catchAsync(async (req, res, next) => {
         orderProducts.push({ subTotal, quantity: count, product: product._id, price: product.price })
     });
 
-    if(req.body.couponCode){
-        const doc = await Other.findOne({
-            coupons: {
-                $elemMatch: {
-                    expiresIn: {$gte: (new Date()).toISOString()},
-                    code: req.body.couponCode
-                }
-            }
-        },{'coupons.$': 1});
-        if(doc && isValidCoupon(doc._doc.coupons[0],products)){
-            discount = doc._doc.coupons[0].discount
-            coupon = doc._doc.coupons[0];
-        }
-        console.log({isTrue: isValidCoupon(doc._doc.coupons[0],products),discount})
-    }
+    
 
     const orderData = {
         totalProduct,
@@ -135,10 +119,6 @@ exports.checkout = catchAsync(async (req, res, next) => {
         state
     }
 
-    if(coupon){
-        orderData.coupon = coupon
-    }
-
     const order = await Order.create(orderData);
 
     if(order){
@@ -147,25 +127,9 @@ exports.checkout = catchAsync(async (req, res, next) => {
                Product.findByIdAndUpdate(item.product,{$inc :{sold: item.quantity,quantity: -item.quantity}}).exec();
             }))
         } catch (error) {
-            console.log(error)
         }
     }
-    if(order.paymentMethod === 'stripe'){
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: orderData.totalPrice * 100,
-            currency: 'usd',
-            receipt_email: req.user.email,
-            metadata: {integration_check: 'accept_a_payment'}
-        });
-    
-        if(!paymentIntent)return next(new AppError('Failed To get Intent',500))
-    
-        res.status(200).json({
-            status: 'success',
-            clientSecret: paymentIntent.client_secret,
-            orderId: order._id
-        })
-    }else if(order.paymentMethod === 'paypal'){
+    if(order.paymentMethod === 'paypal'){
         const paypalOrderId = await paypalCheckout(orderData.totalPrice);
         res.status(200).json({
             status: 'success',

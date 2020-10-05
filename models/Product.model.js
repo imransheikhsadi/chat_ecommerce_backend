@@ -15,25 +15,17 @@ const productSchema = new mongoose.Schema({
         unique: true,
         required: [true, 'Please give product a code']
     },
-    productType: String,
     catagory: String,
     tags: [String],
     quantity: {
         type: Number,
         required: [true, 'How many product do you have?']
     },
-    brand: String,
-    variantCode: String,
     sold: {
         type: Number,
         default: 0
     },
     basePrice: Number,
-    size: [String],
-    color: [{
-        value: String,
-        label: String
-    }],
     image: {
         small: [mongoose.Schema.Types.Mixed],
         card: [mongoose.Schema.Types.Mixed],
@@ -43,18 +35,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    totalReview: {
-        type: Number,
-        default: 0
-    },
-    reviews: [{
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        comment: String,
-        star: Number
-    }],
     title: String,
     variant: Boolean,
     description: String,

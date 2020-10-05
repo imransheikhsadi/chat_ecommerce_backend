@@ -1,6 +1,6 @@
 const express = require('express');
 const { createProduct,getProducts, getSingleProduct, updateProduct, checkout } = require('../controllers/product.controller');
-const { authenticate, checkModerator } = require('../controllers/auth.controller');
+const { authenticate, checkModerator, checkAdmin } = require('../controllers/auth.controller');
 
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/checkout',authenticate,checkout);
 router.route('/')
-.post(authenticate,checkModerator,createProduct)
+.post(authenticate,checkAdmin,createProduct)
 .get(getProducts);
 
 router.route('/:id')

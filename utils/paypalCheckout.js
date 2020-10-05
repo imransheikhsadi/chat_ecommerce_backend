@@ -20,8 +20,6 @@ exports.paypalCheckout = async(amount)=> {
 
     const response = await client.execute(request);
 
-    console.log(response.result,'----------------------------')
-
     return response.result.id;
 }
 
