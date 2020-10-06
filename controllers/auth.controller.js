@@ -80,7 +80,7 @@ exports.checkAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.checkModerator = catchAsync(async (req, res, next) => {
-    if (!req.user.role.includes('moderator') && !req.user.role.includes('admin')) return next(new AppError('You Dont Have Permission To Do This Action', 401));
+    if (!req.user.role.includes('worker') && !req.user.role.includes('admin')) return next(new AppError('You Dont Have Permission To Do This Action', 401));
     next();
 });
 

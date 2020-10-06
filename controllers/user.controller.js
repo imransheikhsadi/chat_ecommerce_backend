@@ -42,7 +42,7 @@ exports.getAllUser = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllAdmin = catchAsync(async (req, res, next) => {
-    const admins = await User.find({role: { $in: ['admin','moderator']}});
+    const admins = await User.find({role: { $in: ['admin','worker']}});
 
     if(!admins) return next(new AppError('No admins found',404))
 
