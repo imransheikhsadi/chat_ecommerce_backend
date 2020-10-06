@@ -68,9 +68,7 @@ function chat(server) {
         });
 
         socket.on('chat', (data) => {
-            console.log(data)
             if (data.type === 'group') {
-                console.log({userGroup,data})
                 userGroup.includes(data.to) && socket.to(data.to).emit('chat', data)
             } else {
                

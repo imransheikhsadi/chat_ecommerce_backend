@@ -154,7 +154,6 @@ exports.signinWithFacebook = catchAsync(async(req,res,next)=>{
 });
 
 exports.checkMessagePermission = catchAsync(async(req,res,next)=>{
-    console.log({from: req.body.from,id: req.user._id})
     if(req.body.from != req.user._id)return next(new AppError('Bad Request',404));
     if(req.body.type === 'group'){
         const group = await Group.findById(req.body.to);

@@ -147,6 +147,31 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 });
 
+
+
+exports.changePassword = catchAsync(async (req, res, next) => {
+    const {oldPassword,newPassword,confirmNewPassword} = req.body;
+    if(!oldPassword || !newPassword || !confirmNewPassword)return next(new AppError('Bad request',400));
+
+
+    const user = await User.findOne({ email: req.user.email }).select('+password');
+
+    if (!user || !await user.checkPassword(oldPassword, user.password)) return next(new AppError('Incorrect Password', 401));
+    
+    user.password = newPassword;
+    user.confirmPassword = confirmNewPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpire = undefined;
+
+    await user.save({ validateModifiedOnly: true })
+
+    res.status(200).json({
+        status: 'success'
+    });
+
+});
+
+
 exports.userSearch = catchAsync( async(req,res,next)=>{
     const features = new ApiFeatures(User.find(),req.query).search().select('name email avatar')
     const users    = await features.query;

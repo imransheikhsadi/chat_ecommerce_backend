@@ -1,6 +1,6 @@
 const express = require('express');
 const { signUp, signIn, authenticate, checkAdmin, signinWithGoogle, signinWithFacebook } = require('../controllers/auth.controller');
-const { updateUser, updateAdmin, getAllUser, sendUser, forgetPassword, resetPassword, userSearch, getUser, getAllAdmin, updateProfilePicture } = require('../controllers/user.controller');
+const { updateUser, updateAdmin, getAllUser, sendUser, forgetPassword, resetPassword, userSearch, getUser, getAllAdmin, updateProfilePicture, changePassword } = require('../controllers/user.controller');
 
 
 const router = express.Router();
@@ -24,5 +24,6 @@ router.patch('/resetPassword/:token',resetPassword);
 router.post('/signinWithGoogle',signinWithGoogle);
 router.post('/signinWithFacebook',signinWithFacebook);
 router.post('/updateProfilePicture',authenticate,updateProfilePicture);
+router.post('/changePassword',authenticate,changePassword);
 
 module.exports = router;
