@@ -1,6 +1,6 @@
 const express = require('express');
 const { signUp, signIn, authenticate, checkAdmin, signinWithGoogle, signinWithFacebook } = require('../controllers/auth.controller');
-const { updateUser, updateAdmin, getAllUser, sendUser, forgetPassword, resetPassword, userSearch, getUser, getAllAdmin, updateProfilePicture, changePassword } = require('../controllers/user.controller');
+const { updateUser, updateAdmin, getAllUser, sendUser, forgetPassword, resetPassword, userSearch, getUser, getAllAdmin, updateProfilePicture, changePassword, deleteUser } = require('../controllers/user.controller');
 
 
 const router = express.Router();
@@ -13,7 +13,7 @@ router.route('/')
 router.route('/:id')
     .get(authenticate,getUser)
     .patch(authenticate,updateUser)
-    .patch(authenticate,updateUser)
+    .delete(authenticate,checkAdmin,deleteUser)
 
 router.patch('/update-admin/:id',authenticate,checkAdmin,updateAdmin);
 router.post('/signup',signUp);
